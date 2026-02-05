@@ -20,6 +20,24 @@ def ensure_kpi_table(
         conn.execute(sql)
 
 
+def ensure_kpi_load_ts_column(
+    engine: Engine,
+    table_name: str,
+) -> None:
+    """
+    Ensure KPI tables have a load_ts column for batch-scoped KPIs.
+    """
+    logger.info("Ensuring load_ts column exists on %s", table_name)
+
+    sql = text(f"""
+        ALTER TABLE {table_name}
+        ADD COLUMN IF NOT EXISTS load_ts TIMESTAMP
+    """)
+
+    with engine.begin() as conn:
+        conn.execute(sql)
+
+
 def delete_kpi_for_date(
     engine: Engine,
     table_name: str,

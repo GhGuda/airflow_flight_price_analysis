@@ -10,7 +10,7 @@
 - `download_kaggle_data`: Downloads Kaggle dataset into `data/raw_bangladesh_data` and validates the schema snapshot before overwriting local data.
 - `load_csv_to_mysql_staging`: Normalizes CSV columns and loads data into MySQL staging.
 - `load_mysql_to_postgres_analytics`: Transforms staging data, validates analytics, and loads to Postgres.
-- `compute_daily_kpis`: Computes daily KPI tables for `kpi_date = {{ ds }}`.
+- `compute_daily_kpis`: Computes KPI tables for the latest `load_ts` batch via `run_latest_load_kpis`.
 
 **Dependencies**
 `download_kaggle_data` -> `load_csv_to_mysql_staging` -> `load_mysql_to_postgres_analytics` -> `compute_daily_kpis`

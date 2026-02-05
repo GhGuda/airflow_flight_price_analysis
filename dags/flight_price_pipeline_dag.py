@@ -7,7 +7,7 @@ from airflow.models import Variable
 from src.get_kaggle_data.download_kaggle_data import download_kaggle_data
 from src.loading_mysql.load_csv_to_mysql import load_csv_to_mysql
 from src.loading_postgres.pg_load_pipeline import mysql_to_postgres
-from src.kpi.run_kpis import run_daily_kpis
+from src.kpi.run_kpis import run_latest_load_kpis
 
 # --------------------------------------------------
 # DAG DEFAULTS (enterprise standard)
@@ -62,12 +62,8 @@ with DAG(
     )
 
     compute_kpis = PythonOperator(
-        task_id="compute_daily_kpis",
-        python_callable=run_daily_kpis,
-        op_kwargs={
-            # Process data for the scheduled date
-            "kpi_date": "{{ ds }}",
-        },
+        task_id="compute_latest_load_kpis",
+        python_callable=run_latest_load_kpis,
         sla=timedelta(minutes=30),
     )
 
