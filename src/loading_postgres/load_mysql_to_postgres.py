@@ -32,16 +32,18 @@ def _delete_existing_dates(df: pd.DataFrame, engine: Engine) -> None:
         conn.execute(sql, {"dates": dates})
 
 
-def load_to_postgres(df: pd.DataFrame, engine: Engine, mode: str | None = None) -> None:
+def load_to_postgres(df: pd.DataFrame, engine: Engine) -> None:
     """
     Load validated analytics data into PostgreSQL.
     """
     logger.info("Loading data into PostgreSQL analytics table")
 
-    load_mode = (mode or os.getenv("POSTGRES_LOAD_MODE", "append")).strip().lower()
+    load_mode = os.getenv("POSTGRES_LOAD_MODE").strip().lower()
+    # logger.info("PostgreSQL load mode: %s", load_mode)
     if load_mode not in {"replace", "append"}:
         raise ValueError("POSTGRES_LOAD_MODE must be 'replace' or 'append'")
-    append_strategy = os.getenv("POSTGRES_APPEND_STRATEGY", "history").strip().lower()
+    
+    append_strategy = os.getenv("POSTGRES_APPEND_STRATEGY").strip().lower()
     if append_strategy not in {"history", "dedupe"}:
         raise ValueError("POSTGRES_APPEND_STRATEGY must be 'history' or 'dedupe'")
 

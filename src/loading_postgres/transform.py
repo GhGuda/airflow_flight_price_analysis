@@ -39,8 +39,6 @@ def prepare_analytics_data(df: pd.DataFrame) -> pd.DataFrame:
         df["departure_date_and_time"]
     ).dt.date
 
-    # df.drop(columns=["departure_date_and_time"], inplace=True)
-
     # ---------------------------------------------------------
     # Total fare (always recompute)
     # ---------------------------------------------------------

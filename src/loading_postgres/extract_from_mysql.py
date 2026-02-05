@@ -1,6 +1,5 @@
 import logging
 import pandas as pd
-from sqlalchemy.engine import Engine
 
 from src.utils.logging import setup_logger
 

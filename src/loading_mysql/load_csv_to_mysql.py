@@ -104,7 +104,7 @@ def load_csv_to_mysql() -> None:
             mode="append",
         )
     else:
-        load_mode = os.getenv("MYSQL_LOAD_MODE", "replace")
+        load_mode = os.getenv("MYSQL_LOAD_MODE").strip().lower()
         insert_dataframe_rows(
             df=df,
             connection=connection,

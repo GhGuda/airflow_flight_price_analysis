@@ -210,6 +210,11 @@ def overwrite_mysql_schema_from_dataframe(
     connection,
     table_name: str,
 ) -> bool:
+    """Check if MySQL schema matches DataFrame schema. If not, drop and recreate MySQL table.
+    Returns:
+        True if overwrite was performed, False if schemas were already identical
+    """
+    
     logger.info("Checking whether MySQL schema overwrite is required")
 
     df_schema = extract_dataframe_logical_schema(df)
