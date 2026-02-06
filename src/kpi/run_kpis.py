@@ -40,69 +40,6 @@ def _get_latest_load_batch(engine: Engine) -> tuple[datetime, list[date]] | None
     return latest_load_ts, latest_dates
 
 
-def _parse_kpi_date(kpi_date: date | datetime | str) -> date:
-    """
-        Parse the input kpi_date into a date object.
-        Accepts date, datetime, or ISO string formats.
-    """
-    if isinstance(kpi_date, date) and not isinstance(kpi_date, datetime):
-        return kpi_date
-
-    if isinstance(kpi_date, datetime):
-        return kpi_date.date()
-
-    if isinstance(kpi_date, str):
-        try:
-            return date.fromisoformat(kpi_date)
-        except ValueError:
-            try:
-                return datetime.fromisoformat(kpi_date).date()
-            except ValueError as exc:
-                raise ValueError(
-                    f"Invalid kpi_date format: {kpi_date}. Expected YYYY-MM-DD."
-                ) from exc
-
-    raise TypeError(
-        f"Invalid kpi_date type: {type(kpi_date).__name__}. "
-        "Expected date, datetime, or ISO string."
-    )
-
-
-# def run_daily_kpis(kpi_date: date | datetime | str) -> None:
-#     """
-#     Run all daily KPI computations for the latest load batch only.
-#     """
-#     resolved_date = _parse_kpi_date(kpi_date)
-
-#     engine: Engine = get_postgres_engine()
-
-#     latest_batch = _get_latest_load_batch(engine)
-#     if not latest_batch:
-#         logger.warning("No analytics data found; skipping KPI computation.")
-#         return
-
-#     latest_load_ts, latest_dates = latest_batch
-#     if resolved_date not in latest_dates:
-#         logger.warning(
-#             "Date %s not found in latest load batch %s; skipping KPI computation.",
-#             resolved_date,
-#             latest_load_ts,
-#         )
-#         return
-
-#     logger.info(
-#         "Running daily KPIs for %s (load_ts=%s)",
-#         resolved_date,
-#         latest_load_ts,
-#     )
-
-#     compute_avg_fare_by_airline(engine, resolved_date, latest_load_ts)
-#     compute_booking_count_by_airline(engine, resolved_date, latest_load_ts)
-#     compute_seasonal_fares(engine, resolved_date, latest_load_ts)
-#     compute_popular_routes(engine, resolved_date, latest_load_ts)
-
-#     logger.info("All daily KPIs completed successfully")
-
 
 def run_latest_load_kpis() -> None:
     """
